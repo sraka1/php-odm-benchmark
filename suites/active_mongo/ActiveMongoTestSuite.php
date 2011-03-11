@@ -37,7 +37,7 @@ class ActiveMongoTestSuite extends TestSuite
             $document->field8 = 'value';
             $document->field9 = 'value';
 
-            $document->save();
+            $document->save(false);
         }
     }
 
@@ -45,7 +45,8 @@ class ActiveMongoTestSuite extends TestSuite
     {
         for ($i = 1; $i <= $nb; $i++) {
             $document = new Document();
-            $document->find($this->documents[$i]->getId());
+            $document->where('_id', $this->documents[$i]->getId());
+            $document->doQuery();
         }
     }
 
@@ -53,9 +54,6 @@ class ActiveMongoTestSuite extends TestSuite
     {
         $query = new Document();
 
-        $documents = array();
-        foreach ($query->limit($nb) as $document) {
-            $documents[] = $document;
-        }
+        $documents = iterator_to_array($query->limit($nb));
     }
 }
