@@ -30,7 +30,10 @@ final class Document extends Annotation
     public $repositoryClass;
     public $indexes = array();
 }
-final class EmbeddedDocument extends Annotation {}
+final class EmbeddedDocument extends Annotation
+{
+    public $indexes = array();
+}
 final class MappedSuperclass extends Annotation {}
 
 final class Inheritance extends Annotation
@@ -65,17 +68,22 @@ final class UniqueIndex extends Index
     public $unique = true;
 }
 
+final class Version extends Annotation {}
+final class Lock extends Annotation {}
+
 class Field extends Annotation
 {
     public $name;
     public $type = 'string';
     public $nullable = false;
+    public $options = array();
+    public $strategy;
 }
 final class Id extends Field
 {
     public $id = true;
     public $type = 'id';
-    public $custom = false;
+    public $strategy = 'auto';
 }
 final class Hash extends Field
 {
@@ -141,7 +149,7 @@ final class Increment extends Field
 final class Collection extends Field
 {
     public $type = 'collection';
-    public $strategy = 'pushPull'; // pushPull, set
+    public $strategy = 'pushAll'; // pushAll, set
 }
 final class EmbedOne extends Field
 {
@@ -150,7 +158,6 @@ final class EmbedOne extends Field
     public $targetDocument;
     public $discriminatorField;
     public $discriminatorMap;
-    public $cascade;
 }
 final class EmbedMany extends Field
 {
@@ -159,8 +166,7 @@ final class EmbedMany extends Field
     public $targetDocument;
     public $discriminatorField;
     public $discriminatorMap;
-    public $strategy = 'pushPull'; // pushPull, set
-    public $cascade;
+    public $strategy = 'pushAll'; // pushAll, set
 }
 final class ReferenceOne extends Field
 {
@@ -170,6 +176,13 @@ final class ReferenceOne extends Field
     public $discriminatorField;
     public $discriminatorMap;
     public $cascade;
+    public $inversedBy;
+    public $mappedBy;
+    public $repositoryMethod;
+    public $sort = array();
+    public $criteria = array();
+    public $limit;
+    public $skip;
 }
 final class ReferenceMany extends Field
 {
@@ -179,10 +192,22 @@ final class ReferenceMany extends Field
     public $discriminatorField;
     public $discriminatorMap;
     public $cascade;
-    public $strategy = 'pushPull'; // pushPull, set
+    public $inversedBy;
+    public $mappedBy;
+    public $repositoryMethod;
+    public $sort = array();
+    public $criteria = array();
+    public $limit;
+    public $skip;
+    public $strategy = 'pushAll'; // pushAll, set
 }
-final class NotSaved extends Field {}
-final class AlsoLoad extends Annotation {
+class NotSaved extends Field {}
+final class Distance extends Field
+{
+    public $distance = true;
+}
+final class AlsoLoad extends Annotation
+{
     public $name;
 }
 final class ChangeTrackingPolicy extends Annotation {}

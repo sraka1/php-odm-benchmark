@@ -8,12 +8,15 @@ class DoctrineMongoTestSuite extends TestSuite
 
     protected function initialize()
     {
-        require_once __DIR__.'/../../vendor/doctrine_mongo/Doctrine/Common/ClassLoader.php';
+        require_once __DIR__.'/../../vendor/doctrine_mongo/vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php';
 
-        $loader = new Doctrine\Common\ClassLoader('Doctrine\ODM', __DIR__.'/../../vendor/doctrine_mongo');
+        $loader = new Doctrine\Common\ClassLoader('Doctrine\ODM\MongoDB', __DIR__.'/../../vendor/doctrine_mongo');
         $loader->register();
 
-        $loader = new Doctrine\Common\ClassLoader('Doctrine\Common', __DIR__.'/../../vendor/doctrine_mongo');
+        $loader = new Doctrine\Common\ClassLoader('Doctrine\MongoDB', __DIR__.'/../../vendor/doctrine_mongo/vendor/doctrine-mongodb/lib');
+        $loader->register();
+
+        $loader = new Doctrine\Common\ClassLoader('Doctrine\Common', __DIR__.'/../../vendor/doctrine_mongo/vendor/doctrine-common/lib');
         $loader->register();
 
         $loader = new Doctrine\Common\ClassLoader('Documents', __DIR__);
@@ -24,13 +27,15 @@ class DoctrineMongoTestSuite extends TestSuite
         $annotation = new Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver($annotationReader, __DIR__.'/Documents');
 
         $config = new Doctrine\ODM\MongoDB\Configuration();
-        $config->setProxyDir(__DIR__ . '/proxies');
+        $config->setProxyDir(__DIR__ . '/cache');
         $config->setProxyNamespace('Proxies');
+        $config->setHydratorDir(__DIR__ . '/cache');
+        $config->setHydratorNamespace('Hydrators');
         $config->setMetadataDriverImpl($annotation);
         $config->setAutoGenerateProxyClasses(false); // no code generation in production
         $config->setDefaultDB($this->db);
 
-        $this->dm = Doctrine\ODM\MongoDB\DocumentManager::create(new Doctrine\ODM\MongoDB\Mongo(), $config);
+        $this->dm = Doctrine\ODM\MongoDB\DocumentManager::create(new Doctrine\MongoDB\Connection(), $config);
     }
 
     protected function createObjectTest($nb)
@@ -76,9 +81,10 @@ class DoctrineMongoTestSuite extends TestSuite
     {
         $this->dm->clear();
 
-        $documents = $this->dm->createQuery('Documents\Document')
+        $documents = iterator_to_array($this->dm->createQueryBuilder('Documents\Document')
             ->limit($nb)
+            ->getQuery()
             ->execute()
-        ;
+        );
     }
 }

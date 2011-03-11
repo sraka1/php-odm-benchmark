@@ -31,7 +31,7 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\Driver,
  *     <?php
  *
  *     $config = new Configuration();
- *     $dm = DocumentManager::create(new Mongo(), $config);
+ *     $dm = DocumentManager::create(new Connection(), $config);
  *
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.com
@@ -39,15 +39,8 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\Driver,
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  * @author      Roman Borschel <roman@code-factory.org>
  */
-class Configuration
+class Configuration extends \Doctrine\MongoDB\Configuration
 {
-    /**
-     * Array of attributes for this configuration instance.
-     *
-     * @var array $attributes
-     */
-    private $attributes = array('mongoCmd' => '$');
-
     /**
      * Adds a namespace under a certain alias.
      *
@@ -210,6 +203,72 @@ class Configuration
     }
 
     /**
+     * Sets the directory where Doctrine generates hydrator class files.
+     *
+     * @param string $dir
+     */
+    public function setHydratorDir($dir)
+    {
+        $this->attributes['hydratorDir'] = $dir;
+    }
+
+    /**
+     * Gets the directory where Doctrine generates hydrator class files.
+     *
+     * @return string
+     */
+    public function getHydratorDir()
+    {
+        return isset($this->attributes['hydratorDir']) ?
+                $this->attributes['hydratorDir'] : null;
+    }
+
+    /**
+     * Gets a boolean flag that indicates whether hydrator classes should always be regenerated
+     * during each script execution.
+     *
+     * @return boolean
+     */
+    public function getAutoGenerateHydratorClasses()
+    {
+        return isset($this->attributes['autoGenerateHydratorClasses']) ?
+                $this->attributes['autoGenerateHydratorClasses'] : true;
+    }
+
+    /**
+     * Sets a boolean flag that indicates whether hydrator classes should always be regenerated
+     * during each script execution.
+     *
+     * @param boolean $bool
+     */
+    public function setAutoGenerateHydratorClasses($bool)
+    {
+        $this->attributes['autoGenerateHydratorClasses'] = $bool;
+    }
+
+    /**
+     * Gets the namespace where hydrator classes reside.
+     * 
+     * @return string
+     */
+    public function getHydratorNamespace()
+    {
+        return isset($this->attributes['hydratorNamespace']) ?
+                $this->attributes['hydratorNamespace'] : null;
+    }
+
+    /**
+     * Sets the namespace where hydrator classes reside.
+     * 
+     * @param string $ns
+     */
+    public function setHydratorNamespace($ns)
+    {
+        $this->attributes['hydratorNamespace'] = $ns;
+    }
+
+
+    /**
      * Sets the default DB to use for all Documents that do not specify
      * a database.
      *
@@ -232,115 +291,25 @@ class Configuration
     }
 
     /**
-     * Sets the environment
+     * Set the class metadata factory class name.
      *
-     * @param string $environment
+     * @param string $cmf
      */
-    public function setEnvironment($environment)
+    public function setClassMetadataFactoryName($cmfName)
     {
-        $this->attributes['environment'] = $environment;
+        $this->_attributes['classMetadataFactoryName'] = $cmfName;
     }
 
     /**
-     * Gets the environment
-     *
-     * @return string $environment
-     */
-    public function getEnvironment()
-    {
-        return isset($this->attributes['environment']) ?
-            $this->attributes['environment'] : null;
-    }
-
-    /**
-     * Gets prefix for environment
-     *
-     * @return string $envPrefix
-     */
-    public function getEnvironmentPrefix()
-    {
-        return isset($this->attributes['environment']) ?
-            sprintf('%s_', $this->attributes['environment']) : null;
-    }
-
-    /**
-     * Set the logger callable.
-     *
-     * @param mixed $loggerCallable The logger callable.
-     */
-    public function setLoggerCallable($loggerCallable)
-    {
-        $this->attributes['loggerCallable'] = $loggerCallable;
-    }
-
-    /**
-     * Gets the logger callable.
-     *
-     * @return mixed $loggerCallable The logger callable.
-     */
-    public function getLoggerCallable()
-    {
-        return isset($this->attributes['loggerCallable']) ?
-                $this->attributes['loggerCallable'] : null;
-    }
-
-    /**
-     * Set prefix for db name
-     *
-     * @param string $prefix The prefix for names of databases
-     */
-    public function setDBPrefix($prefix = null)
-    {
-        $this->attributes['dbPrefix'] = $prefix;
-    }
-
-    /**
-     * Get prefix for db name
-     *
-     * @return string 
-     */
-    public function getDBPrefix()
-    {
-        return isset($this->attributes['dbPrefix']) ?
-            $this->attributes['dbPrefix'] : null;
-    }
-
-    /**
-     * Set suffix for db name
-     *
-     * @param string $suffix The suffix for names of tables
-     */
-    public function setDBSuffix($suffix = null)
-    {
-        $this->attributes['dbSuffix'] = $suffix;
-    }
-
-    /**
-     * Get suffix for db name
+     * Gets the class metadata factory class name.
      *
      * @return string
      */
-    public function getDBSuffix()
+    public function getClassMetadataFactoryName()
     {
-        return isset($this->attributes['dbSuffix']) ?
-            $this->attributes['dbSuffix'] : null;
-    }
-
-    /**
-     * Get mongodb command prefix - '$' by default
-     * @return string
-     */
-    public function getMongoCmd()
-    {
-        return $this->attributes['mongoCmd'];
-    }
-
-    /**
-     * Set mongodb command prefix
-     * @param string $cmd
-     */
-    public function setMongoCmd($cmd)
-    {
-        $this->attributes['mongoCmd'] = $cmd;
+        if ( ! isset($this->_attributes['classMetadataFactoryName'])) {
+            $this->_attributes['classMetadataFactoryName'] = 'Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory';
+        }
+        return $this->_attributes['classMetadataFactoryName'];
     }
 }

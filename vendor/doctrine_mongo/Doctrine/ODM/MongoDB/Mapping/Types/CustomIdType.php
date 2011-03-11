@@ -33,11 +33,21 @@ class CustomIdType extends Type
 {
     public function convertToDatabaseValue($value)
     {
-        return (string) $value;
+        return $value !== null ? $value : null;
     }
 
     public function convertToPHPValue($value)
     {
-        return (string) $value;
+        return $value !== null ? $value : null;
+    }
+
+    public function closureToMongo()
+    {
+        return '$return = $value;';
+    }
+
+    public function closureToPHP()
+    {
+        return '$return = $value;';
     }
 }
