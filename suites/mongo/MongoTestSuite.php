@@ -4,25 +4,15 @@ require_once(__DIR__.'/../../lib/TestSuite.php');
 
 class MongoTestSuite extends TestSuite
 {
-    protected $collection;
-    protected $documents = array();
-
     protected function initialize()
     {
-        $this->collection = $this->db->document;
     }
 
-    protected function createObjectTest($nb)
+    protected function insertSimpleDocumentTest($nb)
     {
+        $documents = array();
         for ($i = 1; $i <= $nb; $i++) {
-            array();
-        }
-    }
-
-    protected function insertTest($nb)
-    {
-        for ($i = 1; $i <= $nb; $i++) {
-            $this->documents[$i] = array(
+            $documents[$i] = array(
                 'field0' => 'value',
                 'field1' => 'value',
                 'field2' => 'value',
@@ -35,22 +25,45 @@ class MongoTestSuite extends TestSuite
                 'field9' => 'value',
             );
         }
-
-        $this->collection->batchInsert($this->documents);
+        $this->db->simple->batchInsert($documents);
     }
 
-    protected function findIdTest($nb)
+    protected function updateSimpleDocumentTest($nb)
     {
-        for ($i = 1; $i <= $nb; $i++) {
-            $document = $this->collection->findOne(array('_id' => $this->documents[$i]['_id']));
+        for ($i = 0; $i < $nb; $i++) {
+            $document = $this->db->simple->find()->skip($i)->next();
+            $document['field0'] = 'updating'.mt_rand(11111, 99999);
+            $this->db->simple->save($document);
         }
     }
 
-    protected function hydrateTest($nb)
+    protected function updateSimpleDocumentGroupTest($nb)
     {
-        $documents = array();
-        foreach ($this->collection->find()->limit($nb) as $document) {
-            $documents[] = $document;
+        for ($i = 0; $i < $nb; $i++) {
+            $document = $this->db->simple->find()->skip($i)->next();
+            $document['field0'] = 'updating'.mt_rand(11111, 99999);
+            $this->db->simple->save($document);
         }
+    }
+
+    protected function deleteSimpleDocumentTest($nb)
+    {
+        for ($i = 0; $i < $nb; $i++) {
+            $document = $this->db->simple->find()->skip($i)->next();
+            $this->db->simple->remove(array('_id' => $document['_id']));
+        }
+    }
+
+    protected function deleteSimpleDocumentGroupTest($nb)
+    {
+        for ($i = 0; $i < $nb; $i++) {
+            $document = $this->db->simple->find()->skip($i)->next();
+            $this->db->simple->remove(array('_id' => $document['_id']));
+        }
+    }
+
+    protected function hydrateSimpleDocumentTest($nb)
+    {
+        $documents = iterator_to_array($this->db->simple->find()->limit($nb));
     }
 }

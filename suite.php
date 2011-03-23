@@ -10,7 +10,6 @@ require_once(__DIR__.'/lib/TestSuite.php');
 if (!isset($argv[1])) {
     throw new RuntimeException('You have to indicate a suite.');
 }
-
 $suite = $argv[1];
 
 // tests
@@ -23,11 +22,10 @@ $test = $argv[2];
 if (!isset($argv[3])) {
   throw new RuntimeException('You have to indicate the number of documents.');
 }
-
 $nb = (int) $argv[3];
 
-// rel
-$rel = isset($argv[4]) ? $argv[4] : null;
+// exclude bootstrap
+$excludeBootstrap = isset($argv[4]);
 
 /*
  * Run.
@@ -38,4 +36,6 @@ require($suite);
 $class = str_replace('.php', '', basename($suite));
 
 $testSuite = new $class();
-$testSuite->run($test, $nb, $rel);
+$time = $testSuite->run($test, $nb, $excludeBootstrap);
+
+echo $time;
