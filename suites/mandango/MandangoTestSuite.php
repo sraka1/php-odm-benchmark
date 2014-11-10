@@ -51,7 +51,7 @@ class MandangoTestSuite extends TestSuite
         $repository = \Model\SimpleDocument::repository();
         for ($i = 0; $i < $nb; $i++) {
             $document = $repository->query()->skip($i)->one();
-            $document->setField0('updating'.mt_rand(11111, 99999));
+            $document->field0('updating'.mt_rand(11111, 99999));
             $repository->save($document);
         }
     }

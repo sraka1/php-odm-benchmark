@@ -40,7 +40,7 @@ class PhalconTestSuite extends TestSuite
             $document = \Document\PhalconSimpleDocument::findFirst(array(
                 "skip" => $i
             ));
-            $document->setField0('updating'.mt_rand(11111, 99999));
+            $document->field0('updating'.mt_rand(11111, 99999));
             $document->save();
         }
     }

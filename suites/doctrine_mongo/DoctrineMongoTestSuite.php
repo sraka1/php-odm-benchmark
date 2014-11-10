@@ -31,16 +31,8 @@ class DoctrineMongoTestSuite extends TestSuite
         $annotationReader = new \Doctrine\Common\Annotations\AnnotationReader();
         $annotationReader->setDefaultAnnotationNamespace('Doctrine\ODM\MongoDB\Mapping\\');
         $annotation = new \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver($annotationReader, __DIR__.'/Documents');
-        $metadataCache = new \Doctrine\Common\Cache\MemcacheCache();
-        $memcache = new \Memcache();
-        $memcache->connect('127.0.0.1', 11211);
-        $metadataCache->setMemcache($memcache);
-        $config->setMetadataDriverImpl($annotation);
-        $config->setMetadataCacheImpl($metadataCache);
 
-        foreach ($metadataCache->getIds() as $id) {
-            $metadataCache->delete($id);
-        }
+        $config->setMetadataDriverImpl($annotation);
 
         $config->setAutoGenerateProxyClasses(false); // no code generation in production
         $config->setDefaultDB($this->db);
