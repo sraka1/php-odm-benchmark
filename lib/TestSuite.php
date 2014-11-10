@@ -83,20 +83,9 @@ EOF
     static protected function getTests()
     {
         return array(
-            'insertSimpleDocument'       => null,
-            'updateSimpleDocument'       => 'insertSimpleDocumentTest',
-            'updateSimpleDocumentGroup'  => 'insertSimpleDocumentTest',
-            'deleteSimpleDocument'       => 'insertSimpleDocumentTest',
-            'deleteSimpleDocumentGroup'  => 'insertSimpleDocumentTest',
-            'hydrateSimpleDocument'      => 'insertSimpleDocumentTest',
-            'insertComplexDocument'      => null,
-            'insertComplexDocumentMinimum' => null,
-            'updateComplexDocument'      => 'insertComplexDocumentTest',
-            'updateComplexDocumentGroup' => 'insertComplexDocumentTest',
-            'deleteComplexDocument'      => 'insertComplexDocumentTest',
-            'deleteComplexDocumentGroup' => 'insertComplexDocumentTest',
-            'hydrateComplexDocument'     => 'insertComplexDocumentTest',
-            'hydrateComplexDocumentQueryCache2Fields' => 'insertComplexDocumentTest',
+            'insertSimpleDocument'       => 'insertSimpleDocumentTest',
+            'updateSimpleDocument'       => 'updateSimpleDocumentTest',
+            'deleteSimpleDocument'       => 'insertSimpleDocumentTest'
         );
     }
 }

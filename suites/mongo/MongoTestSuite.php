@@ -37,33 +37,11 @@ class MongoTestSuite extends TestSuite
         }
     }
 
-    protected function updateSimpleDocumentGroupTest($nb)
-    {
-        for ($i = 0; $i < $nb; $i++) {
-            $document = $this->db->simple->find()->skip($i)->next();
-            $document['field0'] = 'updating'.mt_rand(11111, 99999);
-            $this->db->simple->save($document);
-        }
-    }
-
     protected function deleteSimpleDocumentTest($nb)
     {
         for ($i = 0; $i < $nb; $i++) {
             $document = $this->db->simple->find()->skip($i)->next();
             $this->db->simple->remove(array('_id' => $document['_id']));
         }
-    }
-
-    protected function deleteSimpleDocumentGroupTest($nb)
-    {
-        for ($i = 0; $i < $nb; $i++) {
-            $document = $this->db->simple->find()->skip($i)->next();
-            $this->db->simple->remove(array('_id' => $document['_id']));
-        }
-    }
-
-    protected function hydrateSimpleDocumentTest($nb)
-    {
-        $documents = iterator_to_array($this->db->simple->find()->limit($nb));
     }
 }
