@@ -33,7 +33,7 @@ class DoctrineMongoTestSuite extends TestSuite
         $annotation = new \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver($annotationReader, __DIR__.'/Documents');
         $metadataCache = new \Doctrine\Common\Cache\MemcacheCache();
         $memcache = new \Memcache();
-        $memcache->connect('localhost', 11211);
+        $memcache->connect('127.0.0.1', 11211);
         $metadataCache->setMemcache($memcache);
         $config->setMetadataDriverImpl($annotation);
         $config->setMetadataCacheImpl($metadataCache);
