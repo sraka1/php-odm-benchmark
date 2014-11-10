@@ -19,7 +19,7 @@ class PhalconTestSuite extends TestSuite
     protected function insertSimpleDocumentTest($nb)
     {
         for ($i = 0; $i < $nb; $i++) {
-            $document = new \Document\SimpleDocument();
+            $document = new \Document\PhalconSimpleDocument();
             $document->field0 = 'value';
             $document->field1 = 'value';
             $document->field2 = 'value';
@@ -37,7 +37,7 @@ class PhalconTestSuite extends TestSuite
     protected function updateSimpleDocumentTest($nb)
     {
         for ($i = 0; $i < $nb; $i++) {
-            $document = \Model\SimpleDocument::findFirst(array(
+            $document = \Document\PhalconSimpleDocument::findFirst(array(
                 "skip" => $i
             ));
             $document->setField0('updating'.mt_rand(11111, 99999));
@@ -48,7 +48,7 @@ class PhalconTestSuite extends TestSuite
     protected function deleteSimpleDocumentTest($nb)
     {
         for ($i = 0; $i < $nb; $i++) {
-            $document = \Model\SimpleDocument::findFirst();
+            $document = \Document\PhalconSimpleDocument::findFirst();
             $document->delete();
         }
     }

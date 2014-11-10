@@ -3,7 +3,7 @@
 namespace Document;
 
 /** @Document */
-class SimpleDocument extends \Phalcon\Mvc\Collection
+class PhalconSimpleDocument extends \Phalcon\Mvc\Collection
 {
     /** @Id */
     private $id;
